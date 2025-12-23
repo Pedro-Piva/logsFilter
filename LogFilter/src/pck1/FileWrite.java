@@ -11,9 +11,9 @@ import java.io.IOException;
 public class FileWrite {
 
     public void writeFile(File file, String content) {
-        try (FileWriter myWriter = new FileWriter(file)) {
+        try (FileWriter myWriter = new FileWriter(file, true)) {
             myWriter.write(content);
-            System.out.println("Successfully writed to the file.");
+            //System.out.println("Successfully writed to the file.");
         } catch (IOException e) {
             System.out.println("ERROR WRITING: " + e);
         }

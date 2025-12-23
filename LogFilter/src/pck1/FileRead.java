@@ -12,35 +12,29 @@ import java.io.IOException;
  */
 public class FileRead {
 
-    public String readFile(File file, String day, String month, String hour) throws FileNotFoundException {
-        String res = "";
-        String stop = "";
+    public void readFile(File file, String startTime, String endTime, File filtered) throws FileNotFoundException {
+        FileWrite fw = new FileWrite();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
-            while ((line = br.readLine()) != null) {
-                String fMonth = line.substring(0, 1);
-                String fDay = line.substring(3, 4);
-                String fHour = line.substring(6, 7);
-                String added = "";
-                if (fMonth.equals(month) && fDay.equals(day) && checkHour(Integer.parseInt(fHour), Integer.parseInt(hour))) {
-                    res += line;
-                    res += "\n";
-                    added = line;
-                } 
-                if(!line.equals(added) && !res.equals("")){
+            System.out.println("Running...");
+            while (true) {
+                line = br.readLine();
+                String time = line.substring(0, 14);
+                if (time.equals(startTime)) {
+                    fw.writeFile(filtered, line + "\n");
+                    while(true){
+                        line = br.readLine();
+                        time = line.substring(0, 14);
+                        fw.writeFile(filtered, line + "\n");
+                        if(time.equals(endTime)){
+                            break;
+                        }
+                    }
                     break;
-                }
+                } 
             }
         } catch (IOException e) {
-            System.out.println("Error reading file.");
+            System.out.println("Error reading file." + e);
         }
-        if (res.equals("")) {
-            return null;
-        }
-        return res;
-    }
-
-    protected boolean checkHour(int fH, int h) {
-        return (fH == h || fH == h + 1 || fH == h - 1);
     }
 }
